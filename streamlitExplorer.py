@@ -39,10 +39,11 @@ for i in range(values.shape[1]):
 plt.title(f"x={xAxis} y={yAxis}")
 st.pyplot(fig)
 
-#Adds scikit-learn models
-mod1 = DecisionTreeRegressor(max_depth=4)
-y1 = mod1.fit(X,y).predict(X)
-y2 = AdaBoostRegressor(mod1, n_estimators=n_est).fit(X, y).predict(X)
+#Shows code snippet to end user
+with st.echo():
+    mod1 = DecisionTreeRegressor(max_depth=4)
+    y1 = mod1.fit(X,y).predict(X)
+    y2 = AdaBoostRegressor(mod1, n_estimators=n_est).fit(X, y).predict(X)
 
 #Add model predictions plot 
 fig2, ax2 = plt.subplots()
