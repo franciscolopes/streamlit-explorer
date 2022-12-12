@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pylab as plt
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor
+import pandas as pd
 
 
 st.title("Simulation[tm]")
@@ -64,3 +65,39 @@ ax2.legend()
 st.pyplot(fig2)
 
 
+st.title('BigMac Index')
+
+#Adds function to load data
+@st.cache
+def load_data():
+    data = pd.read_csv(r"bigmac.csv")
+    return data.assign(date = lambda d: pd.to_datetime(d['date']))
+
+df = load_data()
+
+#Adds country selection
+countries = st.sidebar.multiselect(
+    "Select Countries",
+    df['name'].unique()
+)
+
+#Adds column selection
+varname = st.sidebar.selectbox(
+    "Select Column",
+    ("local_price", "dollar_price")
+)
+
+#Adds country filter
+subset_df = df.loc[lambda d: d['name'].isin(countries)]
+
+#Adds checkbox to show data filterd by country
+if st.sidebar.checkbox("Show Raw Data"):
+    st.markdown("### Raw Data")
+    st.write(subset_df)
+
+fig3, ax3 = plt.subplots()
+for name in countries:
+    plotset = subset_df.loc[lambda d: d['name'] == name]
+    ax3.plot(plotset['date'], plotset[varname], label=name)
+ax3.legend()
+st.pyplot(fig3)
