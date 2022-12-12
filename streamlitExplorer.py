@@ -47,7 +47,10 @@ with st.echo():
 
 #Add model predictions plot 
 fig2, ax2 = plt.subplots()
-ax2.scatter(x, y, alpha=0.1)
+#Adds checkbox to toggle scatterplot
+if st.sidebar.checkbox("Toggle Scatterplot"):
+    ax2.scatter(x, y, alpha=0.1)
+
 ax2.plot(x, y1, label="just a tree")
 ax2.plot(x, y2, label=f"adaboost-{n_est}")
 ax2.legend()
