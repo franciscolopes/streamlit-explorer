@@ -20,13 +20,16 @@ n_est = st.sidebar.slider("n_est", min_value=1, max_value=5_000, step=1)
 
 st.write(f"x={xAxis} y={yAxis}")
 
-#simulated data
-values = np.cumprod(1 + np.random.normal(xAxis, yAxis, (100,10)), axis=0)
-n = 1000
-np.random.seed(42)
-x = np.linspace(0, 6, n)
-X = np.linspace(0, 6, n)[:, np.newaxis]
-y = np.sin(X).ravel() + np.sin(6 * X).ravel() + np.random.random(n) * 0.3
+
+#Shows code snippet to end user
+with st.echo():
+    #simulated data
+    values = np.cumprod(1 + np.random.normal(xAxis, yAxis, (100,10)), axis=0)
+    n = 1000
+    np.random.seed(42)
+    x = np.linspace(0, 6, n)
+    X = np.linspace(0, 6, n)[:, np.newaxis]
+    y = np.sin(X).ravel() + np.sin(6 * X).ravel() + np.random.random(n) * 0.3
 
 #builds line chart using streamlit built-in function
 st.line_chart(values)
@@ -39,11 +42,15 @@ for i in range(values.shape[1]):
 plt.title(f"x={xAxis} y={yAxis}")
 st.pyplot(fig)
 
-#Shows code snippet to end user
-with st.echo():
+#Adds caching
+@st.cache
+def make_predictions(n_est):
     mod1 = DecisionTreeRegressor(max_depth=4)
     y1 = mod1.fit(X,y).predict(X)
     y2 = AdaBoostRegressor(mod1, n_estimators=n_est).fit(X, y).predict(X)
+    return y1, y2
+
+y1, y2 = make_predictions(n_est=n_est)
 
 #Add model predictions plot 
 fig2, ax2 = plt.subplots()
