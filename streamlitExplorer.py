@@ -6,8 +6,8 @@ from sklearn.ensemble import AdaBoostRegressor
 import pandas as pd
 
 
-st.title("Simulation[tm]")
-st.write("Here is our super important simulation")
+st.title("Streamlit Explorer")
+st.markdown("This app highlights [Streamlit](https://streamlit.io/) components and lets you explore interactive features. This app is based on [Calmcode lectures](https://calmcode.io/streamlit/hello-world.html)")
 
 #Adds sidebar header and explainer
 st.sidebar.markdown("## Controls")
@@ -19,19 +19,22 @@ yAxis = st.sidebar.slider('Noise', min_value=0.01, max_value=0.10, step=0.01)
 n_est = st.sidebar.slider("n_est", min_value=1, max_value=5_000, step=1)
 
 
-st.write(f"x={xAxis} y={yAxis}")
 
-
+st.markdown("## Simulation Data")
+st.markdown("Data for this section  was created using the following code:")
 #Shows code snippet to end user
 with st.echo():
-    #simulated data
+    #Image 1 and 2
     values = np.cumprod(1 + np.random.normal(xAxis, yAxis, (100,10)), axis=0)
+    
+    #Image 3
     n = 1000
     np.random.seed(42)
     x = np.linspace(0, 6, n)
     X = np.linspace(0, 6, n)[:, np.newaxis]
     y = np.sin(X).ravel() + np.sin(6 * X).ravel() + np.random.random(n) * 0.3
 
+st.write(f"x={xAxis} y={yAxis}")
 #builds line chart using streamlit built-in function
 st.line_chart(values)
 
@@ -65,7 +68,8 @@ ax2.legend()
 st.pyplot(fig2)
 
 
-st.title('BigMac Index')
+st.markdown("## BigMac Index")
+st.markdown("This section uses the [BigMac Index](https://www.kaggle.com/datasets/mrmorj/big-mac-index-data) kaggle dataset")
 
 #Adds function to load data
 @st.cache
